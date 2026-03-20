@@ -9,6 +9,9 @@
 ![引擎](https://img.shields.io/badge/引擎-Unity-black?style=flat-square&logo=unity&logoColor=white)
 ![许可证](https://img.shields.io/badge/许可证-GPL--3.0-4CAF50?style=flat-square)
 
+*本文档 100% 由人类（具体来讲就是一只疏影）纯手工书写，包含 0% 的 AI 生成的内容，请放心阅读。*  
+*（Emoji 是我在预览网站一个一个挑的，为了让文档看起来没那么枯燥，结果被说像 AI 了，特此声明）*
+
 </div>
 
 # 📖 零、前言
