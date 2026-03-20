@@ -1,0 +1,131 @@
+name: Character Bug Report
+description: 提交角色相关问题，如动画、字幕、语音、视效等异常
+title: "[Character Bug]: "
+labels:
+  - bug
+  - character
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请使用此模板提交**角色相关问题**。
+        
+        适用范围包括：
+        - 元数据异常
+        - 开场动画异常
+        - 交互动画异常
+        - 动画混合异常
+        - 字幕异常
+        - 背景音乐异常
+        - 语音异常
+        - 视效异常
+        - 其他
+        
+        提交前请尽量补充完整角色信息，便于快速定位问题。
+
+  - type: markdown
+    attributes:
+      value: "## 角色信息"
+
+  - type: input
+    id: character_id
+    attributes:
+      label: 角色ID
+      description: 填写角色在游戏内的唯一标识 ID
+      placeholder: 例如：10000
+    validations:
+      required: false
+
+  - type: input
+    id: character_dev_name
+    attributes:
+      label: 角色开发名称
+      description: 填写角色在游戏内的开发名称
+      placeholder: 例如：aru_default
+    validations:
+      required: false
+
+  - type: input
+    id: character_nickname
+    attributes:
+      label: 角色昵称
+      description: 填写角色常用昵称
+      placeholder: 例如：阿鲁
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## 问题信息"
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 问题类型
+      description: 请选择最符合该问题的分类
+      options:
+        - 元数据异常
+        - 开场动画异常
+        - 交互动画异常
+        - 动画混合异常
+        - 字幕异常
+        - 背景音乐异常
+        - 语音异常
+        - 视效异常
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: 问题描述
+      description: 请尽量写清楚问题现象、触发时机、期望结果与实际结果
+      placeholder: |
+        1. 问题现象：
+        2. 出现时机：
+        3. 期望结果：
+        4. 实际结果：
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce_steps
+    attributes:
+      label: 复现步骤
+      description: 请按步骤描述如何稳定复现该问题
+      placeholder: |
+        1. 进入……
+        2. 点击……
+        3. 播放……
+        4. 发现……
+    validations:
+      required: false
+
+  - type: input
+    id: software_version
+    attributes:
+      label: 发生版本
+      description: 填写问题出现的客户端版本号
+      placeholder: 例如：v1.0.0+20260317
+    validations:
+      required: true
+
+  - type: textarea
+    id: attachments
+    attributes:
+      label: 截图 / 录屏 / 日志 / 附件链接
+      description: 图片、视频、文本或其他附件链接
+      placeholder: |
+        请在这里粘贴相关链接或补充说明
+    validations:
+      required: false
+
+  - type: textarea
+    id: remarks
+    attributes:
+      label: 备注
+      description: 其他补充信息
+      placeholder:
+    validations:
+      required: false

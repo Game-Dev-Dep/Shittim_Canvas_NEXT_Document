@@ -1,0 +1,103 @@
+name: Software Bug Report
+description: 提交软件相关问题，如 UI、交互逻辑、功能、性能等异常
+title: "[Software Bug]: "
+labels:
+  - bug
+  - software
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请使用此模板提交**软件相关问题**。
+        
+        适用范围包括：
+        - UI 交互异常
+        - UI 动画异常
+        - 操作逻辑异常
+        - 功能异常
+        - 性能异常
+        - 其他
+        
+        请尽量描述清楚问题场景、操作路径和结果表现。
+
+  - type: markdown
+    attributes:
+      value: "## 问题信息"
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 问题类型
+      description: 请选择最符合该问题的分类
+      options:
+        - UI 交互异常
+        - UI 动画异常
+        - 操作逻辑异常
+        - 功能异常
+        - 性能异常
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: 问题描述
+      description: 请尽量写清楚场景、操作步骤、期望结果和实际结果
+      placeholder: |
+        1. 发生场景：
+        2. 操作步骤：
+        3. 期望结果：
+        4. 实际结果：
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce_steps
+    attributes:
+      label: 复现步骤
+      description: 如可稳定复现，请写出详细步骤
+      placeholder: |
+        1. 打开……
+        2. 点击……
+        3. 切换……
+        4. 出现异常……
+    validations:
+      required: false
+
+  - type: input
+    id: software_version
+    attributes:
+      label: 发生版本
+      description: 填写问题出现的客户端版本号
+      placeholder: 例如：v1.0.0+20260317
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: 平台 / 设备
+      description: 填写操作系统、设备型号或运行环境
+      placeholder: 例如：Windows 11 / iPhone 15 / Android 14
+    validations:
+      required: false
+
+  - type: textarea
+    id: attachments
+    attributes:
+      label: 截图 / 录屏 / 日志 / 附件链接
+      description: 图片、视频、文本或其他附件链接
+      placeholder: |
+        请在这里粘贴相关链接或补充说明
+    validations:
+      required: false
+
+  - type: textarea
+    id: remarks
+    attributes:
+      label: 备注
+      description: 其他补充信息
+      placeholder:
+    validations:
+      required: false
