@@ -1,0 +1,154 @@
+name: Auto Replace Issue Category Labels
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  replace-category-label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Replace category labels based on issue form
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || "";
+            const issueNumber = issue.number;
+
+            const currentLabels = (issue.labels || []).map(label =>
+              typeof label === "string" ? label : label.name
+            );
+
+            const characterCategoryLabels = [
+              "character:metadata",
+              "character:opening-animation",
+              "character:interaction-animation",
+              "character:animation-blend",
+              "character:subtitle",
+              "character:bgm",
+              "character:voice",
+              "character:vfx",
+              "character:other"
+            ];
+
+            const softwareCategoryLabels = [
+              "software:ui-interaction",
+              "software:ui-animation",
+              "software:logic",
+              "software:function",
+              "software:performance",
+              "software:other"
+            ];
+
+            const characterMap = {
+              "元数据异常": "character:metadata",
+              "开场动画异常": "character:opening-animation",
+              "交互动画异常": "character:interaction-animation",
+              "动画混合异常": "character:animation-blend",
+              "字幕异常": "character:subtitle",
+              "背景音乐异常": "character:bgm",
+              "语音异常": "character:voice",
+              "视效异常": "character:vfx",
+              "其他": "character:other"
+            };
+
+            const softwareMap = {
+              "UI 交互异常": "software:ui-interaction",
+              "UI 动画异常": "software:ui-animation",
+              "操作逻辑异常": "software:logic",
+              "功能异常": "software:function",
+              "性能异常": "software:performance",
+              "其他": "software:other"
+            };
+
+            function extractField(fieldName) {
+              const escaped = fieldName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+              const regex = new RegExp(
+                `###\\s*${escaped}\\s*\\n+([\\s\\S]*?)(?=\\n###\\s|$)`,
+                "m"
+              );
+              const match = body.match(regex);
+              return match ? match[1].trim() : "";
+            }
+
+            async function removeLabelIfExists(labelName) {
+              if (!currentLabels.includes(labelName)) return;
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: labelName
+                });
+                core.info(`Removed label: ${labelName}`);
+              } catch (error) {
+                core.warning(`Failed to remove label "${labelName}": ${error.message}`);
+              }
+            }
+
+            async function addLabelIfMissing(labelName) {
+              if (!labelName) return;
+              if (currentLabels.includes(labelName)) {
+                core.info(`Label already exists: ${labelName}`);
+                return;
+              }
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: [labelName]
+              });
+              core.info(`Added label: ${labelName}`);
+            }
+
+            const issueType = extractField("问题类型");
+            core.info(`Extracted 问题类型: ${issueType || "(empty)"}`);
+
+            const isCharacter = currentLabels.includes("character");
+            const isSoftware = currentLabels.includes("software");
+
+            if (!isCharacter && !isSoftware) {
+              core.info('Skip: neither "character" nor "software" label found.');
+              return;
+            }
+
+            if (isCharacter && isSoftware) {
+              core.warning('Issue has both "character" and "software" labels. Skip to avoid ambiguity.');
+              return;
+            }
+
+            if (isCharacter) {
+              for (const label of characterCategoryLabels) {
+                await removeLabelIfExists(label);
+              }
+
+              const newLabel = characterMap[issueType];
+              if (!newLabel) {
+                core.warning(`No mapped character label for issue type: ${issueType}`);
+                return;
+              }
+
+              await addLabelIfMissing(newLabel);
+              return;
+            }
+
+            if (isSoftware) {
+              for (const label of softwareCategoryLabels) {
+                await removeLabelIfExists(label);
+              }
+
+              const newLabel = softwareMap[issueType];
+              if (!newLabel) {
+                core.warning(`No mapped software label for issue type: ${issueType}`);
+                return;
+              }
+
+              await addLabelIfMissing(newLabel);
+              return;
+            }
